@@ -10,9 +10,13 @@
   library(odbc)
   library(zoo)
 
+cofig <- yaml::read_yaml("config.yaml")
+
+df <- read.csv(paste0(cofig$proj_dir, 
+               "/cdsc_new_year_outbreak_linelist.csv"))
 
 # ---- Read data ----
-linelist <- read_csv("cdsc_new_year_outbreak_linelist.csv", show_col_types = FALSE)
+linelist <- read.csv("cdsc_new_year_outbreak_linelist.csv", show_col_types = FALSE)
 
 # Exposure event datetime (assumed)
 party_dt <- ymd_hm("2026-01-01 20:00", tz = "UTC")
@@ -86,7 +90,7 @@ linelist <- linelist %>%
 linelist <- linelist %>%
   mutate(
     any_symptom = sick_std | diarrhoea,
-    case = any_symptom & !is.na(hours_since_party) & hours_since_party >= 0 & hours_since_party <= 24
+    case = any_symptom & !is.na(hours_since_party) & hours_since_party >= 0 & hours_since_party <= 48
   )
 
 # ---- Summary statistics ----
